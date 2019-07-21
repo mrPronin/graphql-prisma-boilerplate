@@ -1,0 +1,1026 @@
+# source: http://localhost:4466/boilerplate/dev
+# timestamp: Sun Jul 21 2019 17:57:13 GMT+0200 (CEST)
+
+type AggregateAuthProvider {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+type AuthProvider implements Node {
+  id: ID!
+  type: AuthProviderType!
+  userId: String!
+  token: String!
+  user: User!
+}
+
+"""A connection to a list of items."""
+type AuthProviderConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AuthProviderEdge]!
+  aggregate: AggregateAuthProvider!
+}
+
+input AuthProviderCreateInput {
+  id: ID
+  type: AuthProviderType!
+  userId: String!
+  token: String!
+  user: UserCreateOneWithoutAuthProvidersInput!
+}
+
+input AuthProviderCreateManyWithoutUserInput {
+  create: [AuthProviderCreateWithoutUserInput!]
+  connect: [AuthProviderWhereUniqueInput!]
+}
+
+input AuthProviderCreateWithoutUserInput {
+  id: ID
+  type: AuthProviderType!
+  userId: String!
+  token: String!
+}
+
+"""An edge in a connection."""
+type AuthProviderEdge {
+  """The item at the end of the edge."""
+  node: AuthProvider!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum AuthProviderOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  userId_ASC
+  userId_DESC
+  token_ASC
+  token_DESC
+}
+
+type AuthProviderPreviousValues {
+  id: ID!
+  type: AuthProviderType!
+  userId: String!
+  token: String!
+}
+
+input AuthProviderScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AuthProviderScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AuthProviderScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AuthProviderScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: AuthProviderType
+
+  """All values that are not equal to given value."""
+  type_not: AuthProviderType
+
+  """All values that are contained in given list."""
+  type_in: [AuthProviderType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [AuthProviderType!]
+  userId: String
+
+  """All values that are not equal to given value."""
+  userId_not: String
+
+  """All values that are contained in given list."""
+  userId_in: [String!]
+
+  """All values that are not contained in given list."""
+  userId_not_in: [String!]
+
+  """All values less than the given value."""
+  userId_lt: String
+
+  """All values less than or equal the given value."""
+  userId_lte: String
+
+  """All values greater than the given value."""
+  userId_gt: String
+
+  """All values greater than or equal the given value."""
+  userId_gte: String
+
+  """All values containing the given string."""
+  userId_contains: String
+
+  """All values not containing the given string."""
+  userId_not_contains: String
+
+  """All values starting with the given string."""
+  userId_starts_with: String
+
+  """All values not starting with the given string."""
+  userId_not_starts_with: String
+
+  """All values ending with the given string."""
+  userId_ends_with: String
+
+  """All values not ending with the given string."""
+  userId_not_ends_with: String
+  token: String
+
+  """All values that are not equal to given value."""
+  token_not: String
+
+  """All values that are contained in given list."""
+  token_in: [String!]
+
+  """All values that are not contained in given list."""
+  token_not_in: [String!]
+
+  """All values less than the given value."""
+  token_lt: String
+
+  """All values less than or equal the given value."""
+  token_lte: String
+
+  """All values greater than the given value."""
+  token_gt: String
+
+  """All values greater than or equal the given value."""
+  token_gte: String
+
+  """All values containing the given string."""
+  token_contains: String
+
+  """All values not containing the given string."""
+  token_not_contains: String
+
+  """All values starting with the given string."""
+  token_starts_with: String
+
+  """All values not starting with the given string."""
+  token_not_starts_with: String
+
+  """All values ending with the given string."""
+  token_ends_with: String
+
+  """All values not ending with the given string."""
+  token_not_ends_with: String
+}
+
+type AuthProviderSubscriptionPayload {
+  mutation: MutationType!
+  node: AuthProvider
+  updatedFields: [String!]
+  previousValues: AuthProviderPreviousValues
+}
+
+input AuthProviderSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AuthProviderSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AuthProviderSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AuthProviderSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AuthProviderWhereInput
+}
+
+enum AuthProviderType {
+  GOOGLE
+  FACEBOOK
+  EMAIL
+  UNDEFINED
+}
+
+input AuthProviderUpdateInput {
+  type: AuthProviderType
+  userId: String
+  token: String
+  user: UserUpdateOneRequiredWithoutAuthProvidersInput
+}
+
+input AuthProviderUpdateManyDataInput {
+  type: AuthProviderType
+  userId: String
+  token: String
+}
+
+input AuthProviderUpdateManyMutationInput {
+  type: AuthProviderType
+  userId: String
+  token: String
+}
+
+input AuthProviderUpdateManyWithoutUserInput {
+  create: [AuthProviderCreateWithoutUserInput!]
+  connect: [AuthProviderWhereUniqueInput!]
+  set: [AuthProviderWhereUniqueInput!]
+  disconnect: [AuthProviderWhereUniqueInput!]
+  delete: [AuthProviderWhereUniqueInput!]
+  update: [AuthProviderUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [AuthProviderUpdateManyWithWhereNestedInput!]
+  deleteMany: [AuthProviderScalarWhereInput!]
+  upsert: [AuthProviderUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input AuthProviderUpdateManyWithWhereNestedInput {
+  where: AuthProviderScalarWhereInput!
+  data: AuthProviderUpdateManyDataInput!
+}
+
+input AuthProviderUpdateWithoutUserDataInput {
+  type: AuthProviderType
+  userId: String
+  token: String
+}
+
+input AuthProviderUpdateWithWhereUniqueWithoutUserInput {
+  where: AuthProviderWhereUniqueInput!
+  data: AuthProviderUpdateWithoutUserDataInput!
+}
+
+input AuthProviderUpsertWithWhereUniqueWithoutUserInput {
+  where: AuthProviderWhereUniqueInput!
+  update: AuthProviderUpdateWithoutUserDataInput!
+  create: AuthProviderCreateWithoutUserInput!
+}
+
+input AuthProviderWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AuthProviderWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AuthProviderWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AuthProviderWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: AuthProviderType
+
+  """All values that are not equal to given value."""
+  type_not: AuthProviderType
+
+  """All values that are contained in given list."""
+  type_in: [AuthProviderType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [AuthProviderType!]
+  userId: String
+
+  """All values that are not equal to given value."""
+  userId_not: String
+
+  """All values that are contained in given list."""
+  userId_in: [String!]
+
+  """All values that are not contained in given list."""
+  userId_not_in: [String!]
+
+  """All values less than the given value."""
+  userId_lt: String
+
+  """All values less than or equal the given value."""
+  userId_lte: String
+
+  """All values greater than the given value."""
+  userId_gt: String
+
+  """All values greater than or equal the given value."""
+  userId_gte: String
+
+  """All values containing the given string."""
+  userId_contains: String
+
+  """All values not containing the given string."""
+  userId_not_contains: String
+
+  """All values starting with the given string."""
+  userId_starts_with: String
+
+  """All values not starting with the given string."""
+  userId_not_starts_with: String
+
+  """All values ending with the given string."""
+  userId_ends_with: String
+
+  """All values not ending with the given string."""
+  userId_not_ends_with: String
+  token: String
+
+  """All values that are not equal to given value."""
+  token_not: String
+
+  """All values that are contained in given list."""
+  token_in: [String!]
+
+  """All values that are not contained in given list."""
+  token_not_in: [String!]
+
+  """All values less than the given value."""
+  token_lt: String
+
+  """All values less than or equal the given value."""
+  token_lte: String
+
+  """All values greater than the given value."""
+  token_gt: String
+
+  """All values greater than or equal the given value."""
+  token_gte: String
+
+  """All values containing the given string."""
+  token_contains: String
+
+  """All values not containing the given string."""
+  token_not_contains: String
+
+  """All values starting with the given string."""
+  token_starts_with: String
+
+  """All values not starting with the given string."""
+  token_not_starts_with: String
+
+  """All values ending with the given string."""
+  token_ends_with: String
+
+  """All values not ending with the given string."""
+  token_not_ends_with: String
+  user: UserWhereInput
+}
+
+input AuthProviderWhereUniqueInput {
+  id: ID
+}
+
+type BatchPayload {
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
+}
+
+scalar DateTime
+
+"""Raw JSON value"""
+scalar Json
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  createAuthProvider(data: AuthProviderCreateInput!): AuthProvider!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateAuthProvider(data: AuthProviderUpdateInput!, where: AuthProviderWhereUniqueInput!): AuthProvider
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteAuthProvider(where: AuthProviderWhereUniqueInput!): AuthProvider
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertAuthProvider(where: AuthProviderWhereUniqueInput!, create: AuthProviderCreateInput!, update: AuthProviderUpdateInput!): AuthProvider!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyAuthProviders(data: AuthProviderUpdateManyMutationInput!, where: AuthProviderWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyAuthProviders(where: AuthProviderWhereInput): BatchPayload!
+  executeRaw(database: PrismaDatabase, query: String!): Json!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+enum PrismaDatabase {
+  default
+}
+
+type Query {
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  authProviders(where: AuthProviderWhereInput, orderBy: AuthProviderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AuthProvider]!
+  user(where: UserWhereUniqueInput!): User
+  authProvider(where: AuthProviderWhereUniqueInput!): AuthProvider
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  authProvidersConnection(where: AuthProviderWhereInput, orderBy: AuthProviderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AuthProviderConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Subscription {
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  authProvider(where: AuthProviderSubscriptionWhereInput): AuthProviderSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  authProviders(where: AuthProviderWhereInput, orderBy: AuthProviderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AuthProvider!]
+  signupType: AuthProviderType!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  id: ID
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType
+  authProviders: AuthProviderCreateManyWithoutUserInput
+}
+
+input UserCreateOneWithoutAuthProvidersInput {
+  create: UserCreateWithoutAuthProvidersInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutAuthProvidersInput {
+  id: ID
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  lastName_ASC
+  lastName_DESC
+  picture_ASC
+  picture_DESC
+  signupType_ASC
+  signupType_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateInput {
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType
+  authProviders: AuthProviderUpdateManyWithoutUserInput
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType
+}
+
+input UserUpdateOneRequiredWithoutAuthProvidersInput {
+  create: UserCreateWithoutAuthProvidersInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutAuthProvidersDataInput
+  upsert: UserUpsertWithoutAuthProvidersInput
+}
+
+input UserUpdateWithoutAuthProvidersDataInput {
+  name: String
+  email: String
+  password: String
+  lastName: String
+  picture: String
+  signupType: AuthProviderType
+}
+
+input UserUpsertWithoutAuthProvidersInput {
+  update: UserUpdateWithoutAuthProvidersDataInput!
+  create: UserCreateWithoutAuthProvidersInput!
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  lastName: String
+
+  """All values that are not equal to given value."""
+  lastName_not: String
+
+  """All values that are contained in given list."""
+  lastName_in: [String!]
+
+  """All values that are not contained in given list."""
+  lastName_not_in: [String!]
+
+  """All values less than the given value."""
+  lastName_lt: String
+
+  """All values less than or equal the given value."""
+  lastName_lte: String
+
+  """All values greater than the given value."""
+  lastName_gt: String
+
+  """All values greater than or equal the given value."""
+  lastName_gte: String
+
+  """All values containing the given string."""
+  lastName_contains: String
+
+  """All values not containing the given string."""
+  lastName_not_contains: String
+
+  """All values starting with the given string."""
+  lastName_starts_with: String
+
+  """All values not starting with the given string."""
+  lastName_not_starts_with: String
+
+  """All values ending with the given string."""
+  lastName_ends_with: String
+
+  """All values not ending with the given string."""
+  lastName_not_ends_with: String
+  picture: String
+
+  """All values that are not equal to given value."""
+  picture_not: String
+
+  """All values that are contained in given list."""
+  picture_in: [String!]
+
+  """All values that are not contained in given list."""
+  picture_not_in: [String!]
+
+  """All values less than the given value."""
+  picture_lt: String
+
+  """All values less than or equal the given value."""
+  picture_lte: String
+
+  """All values greater than the given value."""
+  picture_gt: String
+
+  """All values greater than or equal the given value."""
+  picture_gte: String
+
+  """All values containing the given string."""
+  picture_contains: String
+
+  """All values not containing the given string."""
+  picture_not_contains: String
+
+  """All values starting with the given string."""
+  picture_starts_with: String
+
+  """All values not starting with the given string."""
+  picture_not_starts_with: String
+
+  """All values ending with the given string."""
+  picture_ends_with: String
+
+  """All values not ending with the given string."""
+  picture_not_ends_with: String
+  signupType: AuthProviderType
+
+  """All values that are not equal to given value."""
+  signupType_not: AuthProviderType
+
+  """All values that are contained in given list."""
+  signupType_in: [AuthProviderType!]
+
+  """All values that are not contained in given list."""
+  signupType_not_in: [AuthProviderType!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  authProviders_every: AuthProviderWhereInput
+  authProviders_some: AuthProviderWhereInput
+  authProviders_none: AuthProviderWhereInput
+}
+
+input UserWhereUniqueInput {
+  id: ID
+}
