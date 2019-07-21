@@ -1,7 +1,7 @@
 {
   "name": "boilerplate-backend",
   "version": "1.0.0",
-  "description": "Boilerplate backend with authentication.",
+  "description": "Boilerplate GpaphQL backend with authentication, Prisma and PostreSQL.",
   "main": "index.js",
   "engines": {
     "node": "8.16.0"
@@ -19,6 +19,7 @@
   },
   "author": "Oleksandr Pronin <pronin.alx@gmail.com>",
   "license": "ISC",
+  "repository": "github:mrPronin/graphql-prisma-boilerplate",
   "dependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.5",
@@ -33,7 +34,6 @@
     "bcryptjs": "^2.4.3",
     "cross-fetch": "^3.0.4",
     "env-cmd": "^9.0.3",
-    "fast-crc32c": "^1.0.4",
     "google-auth-library": "^4.2.0",
     "graphql": "^0.13.2",
     "graphql-cli": "^2.17.0",
@@ -48,7 +48,6 @@
     "ws": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.2",
     "apollo-boost": "^0.4.2",
