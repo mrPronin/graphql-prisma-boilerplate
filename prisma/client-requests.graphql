@@ -1,0 +1,68 @@
+// createUser
+mutation {
+  createUser(
+    data: {
+      name: "Oleksandr"
+      email: "pronin@example.com"
+      password: "12345678"
+      lastName: "Pronin"
+    }
+  ) {
+    token
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+
+// login
+mutation {
+  login(
+    data: {
+      email: "pronin@example.com"
+      password: "12345678"
+    }
+  ) {
+    token
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+
+// me
+query {
+  me {
+    id
+    name
+    email
+    signupType
+    authProviders {
+      id
+      type
+    }
+  }
+}
+
+// continueWithFacebook
+mutation {
+  continueWithFacebook(
+    data: {
+      accessToken: "EAAGq8wrtB1UBAH4vLgTeq63FFFg8kZBdAwznSggYdJw3GzQVwPZBphc8odidqtVnvo9qQZB2799x9pacDoWa6NBhVEk7UzArVUzarTLbLdds293Ub6QKvywlqHVNvfB7AlsBfDG6ZBqAv9PGQZAGxRJpIEZAZBRMNsg6Ro6ZBenokMink3aGNftjeo5rAaM2Okca9HCawWI1pgzgR2uXaa1C"
+      refreshToken: ""
+    }
+  ) {
+    token
+    user {
+      id
+      name
+      email
+      lastName
+      picture
+    }
+  }
+}

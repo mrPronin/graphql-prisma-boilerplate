@@ -1,0 +1,15 @@
+// users
+
+query {
+  users {
+    id
+    name
+    email
+    signupType
+    picture
+    authProviders {
+      id
+      type
+    }
+  }
+}
