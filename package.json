@@ -38,7 +38,7 @@
     "env-cmd": "^9.0.3",
     "google-auth-library": "^4.2.0",
     "graphql": "^0.13.2",
-    "graphql-cli": "^2.17.0",
+    "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.17.4",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
