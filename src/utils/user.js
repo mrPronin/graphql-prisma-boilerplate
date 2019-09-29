@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import prisma from '../prisma'
+import photon from '../photon'
 import sgMail from '../services/mailer'
 import {
   errorIncorrectPasswordLength, 
@@ -54,29 +54,26 @@ const getUserBySocialMediaId = async (userId, type) => {
   if (!userId || 0 === userId.length) return null
   if (!type || 0 === type.length) return null
 
-  const providers = await prisma.query.authProviders({
-      where: {
-          AND: [
-              { type: type },
-              { userId: userId }
-          ]
-      }
-  }, `
-       {
-           id
-           user {
-               id
-           }
-       }
-  `)
+  const providers = await photon.authProviders.findMany({
+    select: {
+        id: true,
+        user: {
+            select: {
+                id: true
+            }
+        }
+    },
+    where: {
+        AND: [
+            { type: type },
+            { userId: userId }
+        ]
+    }
+  })
 
   if (providers.length === 0) return null
 
-  const user = await prisma.query.user({
-      where: {
-          id: providers[0].user.id
-      }
-  })
+  const user = await getUserById(providers[0].user.id)
 
   return {
       user,
@@ -85,56 +82,63 @@ const getUserBySocialMediaId = async (userId, type) => {
 }
 
 const getUserByEmail = async (email) => {
-
-  if (!email || 0 === email.length) return null
-  
-  const users = await prisma.query.users({
-      where: {
-          email: email
-      }
-  })
-  if (users.length === 0) return null
-
-  return users[0]
-}
-
-const getUserById = async (id) => {
-    if (_.isEmpty(id) || !_.isString(id)) return
-
-    const users = await prisma.query.users({
+    if (!email || 0 === email.length) return null
+    const users = await photon.users.findMany({
         where: {
-            id
+            email: email
         }
     })
+
+    // console.log(`users: ${JSON.stringify(users, undefined, 2)}`)
+
     if (users.length === 0) return null
 
     return users[0]
+}
+
+const getUserById = async (id) => {
+    if (_.isEmpty(id) || !_.isString(id)) return null
+
+    const users = await photon.users.findMany({ where: { id } })
+    if (users.length === 0) return null
+
+    return users[0]
+}
+
+const existsUser = async (id) => {
+    if (_.isEmpty(id) || !_.isString(id)) return false
+
+    const users = await photon.users.findMany({ where: { id } })
+    if (users.length === 0) return false
+    return true
 }
 
 const getAuthProviderForUser = async (id, type) => {
   if (!id || 0 === id.length) return null
   if (!type || 0 === type.length) return null
 
-  const providers = await prisma.query.authProviders({
-      where: {
-          AND: [
-              { type: type },
-              {
-                  user: {
-                      id: id
-                  }
-              }
-          ]
-      }
-  }, `
-       {
-           id
-       }
-  `)
+  let providers = []
+  try {
+    providers = await photon.users.findOne({ where: { id } })
+    .authProviders({ where: { type } })
+  } catch (error) {
+      return null
+  }
 
   if (providers.length === 0) return null
 
   return providers[0]
+}
+
+const updateAuthProvider = async (id, data) => {
+    await photon.authProviders.update({
+        where: { id },
+        data
+    })
+}
+
+const createAuthProvider = async (data) => {
+    await photon.authProviders.create({ data })
 }
 
 const continueWithAuthProvider = async (providerType, userData, token) => {
@@ -157,14 +161,7 @@ const continueWithAuthProvider = async (providerType, userData, token) => {
         } = result
         await updateUserWithPicture(userBySocialMediaId, picture)
         // Update auth provider with Google token received from client
-        await prisma.mutation.updateAuthProvider({
-            data: {
-                token: token
-            },
-            where: {
-                id: authProvider.id
-            }
-        })
+        await updateAuthProvider(authProvider.id, { token })
 
         return {
             user: userBySocialMediaId,
@@ -181,26 +178,19 @@ const continueWithAuthProvider = async (providerType, userData, token) => {
             const authProvider = await getAuthProviderForUser(userByEmail.id, providerType)
             if (authProvider) {
                 // User has connected GOOGLE auth provider
-                await prisma.mutation.updateAuthProvider({
-                    data: {
-                        userId,
-                        token: token
-                    },
-                    where: {
-                        id: authProvider.id
-                    }
+                await updateAuthProvider(authProvider.id, {
+                    userId,
+                    token: token
                 })
             } else {
                 // Create auth provider for user
-                await prisma.mutation.createAuthProvider({
-                    data: {
-                        type: providerType,
-                        userId,
-                        token: token,
-                        user: {
-                            connect: {
-                                id: userByEmail.id
-                            }
+                await createAuthProvider({
+                    type: providerType,
+                    userId,
+                    token: token,
+                    user: {
+                        connect: {
+                            id: userByEmail.id
                         }
                     }
                 })
@@ -221,15 +211,13 @@ const continueWithAuthProvider = async (providerType, userData, token) => {
     const user = await createUserWithData(newUserData)
 
     // Create auth provider for user
-    await prisma.mutation.createAuthProvider({
-        data: {
-            type: providerType,
-            userId,
-            token: token,
-            user: {
-                connect: {
-                    id: user.id
-                }
+    await createAuthProvider({
+        type: providerType,
+        userId,
+        token: token,
+        user: {
+            connect: {
+                id: user.id
             }
         }
     })
@@ -248,14 +236,14 @@ const deleteUser = async (id, info, followUpEmailEnabled = false) => {
     if (followUpEmailEnabled) {
         sendFollowUpEmail(user.email, user.name)
     }
-    return prisma.mutation.deleteUser({
-        where: {
-            id
-        }
-    }, info)
+    await photon.users.delete({
+        where: { id }
+    })
+    return user
 }
 
 const createUserWithData = async (userData, welcomeEmailEnabled = false) => {
+    // console.log(`userData: ${JSON.stringify(userData, undefined, 2)}`)
     const { name, email, password, lastName, picture, signupType } = userData
     const newUserData = {}
     // name
@@ -287,16 +275,24 @@ const createUserWithData = async (userData, welcomeEmailEnabled = false) => {
     if (!_.isEmpty(signupType) && _.isString(signupType)) {
         newUserData.signupType = signupType
     }
-
-    const user =  await prisma.mutation.createUser({
-        data: {
-            ...newUserData
-        }
-    })
-    if (welcomeEmailEnabled) {
+   const user =  await photon.users.create({
+    data: {
+        ...newUserData
+    }
+})
+if (welcomeEmailEnabled) {
         sendWelcomeEmail(user)
     }
     return user
+}
+
+const updateUser = (id, data) => {
+    return photon.users.update({
+        where: {
+            id
+        },
+        data
+    })
 }
 
 const sendWelcomeEmail = (user) => {
@@ -344,13 +340,9 @@ const sendWelcomeEmail = (user) => {
 const updateUserWithPicture = async (user, picture) => {
   if (!(typeof picture === 'string' && picture.length)) { return }
   if (typeof user.picture === 'string' && user.picture.length) { return }
-  await prisma.mutation.updateUser({
-      where: {
-          id: user.id
-      },
-      data: {
-          picture
-      }
+  await photon.users.update({
+        where: { id: user.id },
+        data: { picture }
   })
 }
 
@@ -359,12 +351,16 @@ export {
   generateToken, 
   hashPassword, 
   getUserId,
+  existsUser,
   createUserWithData,
+  updateUser,
   deleteUser,
   getUserBySocialMediaId, 
   getUserByEmail,
+  getUserById,
   getAuthProviderForUser,
   continueWithAuthProvider,
+  updateUserWithPicture,
   sendWelcomeEmail,
   sendFollowUpEmail
 }

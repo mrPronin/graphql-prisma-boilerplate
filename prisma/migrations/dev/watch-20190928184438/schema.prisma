@@ -1,0 +1,37 @@
+generator photon {
+  provider = "photonjs"
+  output   = "../node_modules/@generated/photon"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+model User {
+  id           String         @default(cuid()) @id
+  authProvider AuthProvider[]
+  createdAt    DateTime       @default(now())
+  email        String?
+  lastName     String?
+  name         String?
+  password     String?
+  picture      String?
+  signupType   AuthProviderType @default(UNDEFINED)
+  updatedAt    DateTime       @updatedAt
+}
+
+model AuthProvider {
+  id     String @default(cuid()) @id
+  token  String
+  type   AuthProviderType
+  user   User
+  userId String
+}
+
+enum AuthProviderType {
+    GOOGLE
+    FACEBOOK
+    EMAIL
+    UNDEFINED
+}

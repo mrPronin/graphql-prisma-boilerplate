@@ -1,17 +1,14 @@
 import _ from 'lodash'
-import moment from 'moment'
 
-import { getUserId } from '../utils/user'
-import { errorIncorrectDateProvided } from '../utils/errors'
+import {
+    getUserId,
+    getUserById
+} from '../utils/user'
 
 const Query = {
-    me(parent, args, { prisma, request }, info) {
+    me(parent, args, { request }, info) {
         const userId = getUserId(request)
-        return prisma.query.user({
-            where: {
-                id: userId
-            }
-        }, info)
+        return getUserById(userId)
     }
 }
 

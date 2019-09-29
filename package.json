@@ -4,14 +4,16 @@
   "description": "Boilerplate GpaphQL backend with authentication, Prisma and PostreSQL.",
   "main": "index.js",
   "engines": {
-    "node": "8.16.0"
+    "node": "v10.16.3"
   },
   "scripts": {
     "start": "node dist/index.js",
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "test": "env-cmd -f ./config/test.env jest --watchAll --runInBand",
-    "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env"
+    "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
+    "prisma-generate": "env-cmd -f ./config/dev.env prisma2 generate",
+    "prisma-dev": "env-cmd -f ./config/dev.env prisma2 dev"
   },
   "jest": {
     "globalSetup": "./tests/jest/globalSetup.js",
@@ -43,7 +45,6 @@
     "moment": "^2.24.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
-    "prisma": "^1.34.0",
     "prisma-binding": "^2.3.12",
     "ws": "^7.0.0"
   },
@@ -58,6 +59,7 @@
     "apollo-link-ws": "^1.0.17",
     "subscriptions-transport-ws": "^0.9.16",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "prisma2": "2.0.0-preview-12"
   }
 }

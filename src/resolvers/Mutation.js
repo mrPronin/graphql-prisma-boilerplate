@@ -6,8 +6,10 @@ import {
     generateToken, 
     hashPassword,
     createUserWithData,
+    updateUser,
     deleteUser,
-    getUserId, 
+    getUserId,
+    existsUser,
     getUserByEmail,
     continueWithAuthProvider
 } from '../utils/user'
@@ -15,13 +17,12 @@ import {
 import { authenticateFacebook, authenticateGoogle } from '../services/auth'
 
 const Mutation = {
-    async createUser(parent, args, {
-        prisma
-    }, info) {
+    async createUser(parent, args, { photon }, info) {
         const existingUser = await getUserByEmail(args.data.email)
         if (existingUser) {
             throw errorEmailTaken()
         }
+        
         const password = await hashPassword(args.data.password)
 
         // Create new user
@@ -37,7 +38,7 @@ const Mutation = {
             token: generateToken(user.id)
         }
     },
-    async login(parent, args, { prisma }, info) {
+    async login(parent, args, { photon }, info) {
         const { password, email } = args.data
         if (!password || 0 === password.length) {
             throw errorUnableToLogin()
@@ -62,29 +63,24 @@ const Mutation = {
             token: generateToken(user.id)
         }
     },
-    async deleteUser(parent, args, { prisma, request }, info) {
-        
-        const userExists = await prisma.exists.User({ id: args.id })
+    async deleteUser(parent, args, { request }, info) {
+        const userId = getUserId(request)
+        const userExists = await existsUser(userId)
         if (!userExists) {
             throw errorUserNotFound()
         }
-        
-       const userId = getUserId(request)
+        // console.log(`info: ${JSON.stringify(info, undefined, 2)}`)
+    //    return null
        return deleteUser(userId, info)
     },
-    async updateUser(parent, args, { prisma, request }, info) {
+    async updateUser(parent, args, { request }, info) {
         const userId = getUserId(request)
 
         if (typeof args.data.password === 'string') {
             args.data.password = await hashPassword(args.data.password)
         }
 
-        return prisma.mutation.updateUser({
-            where: {
-                id: userId
-            },
-            data: args.data
-        }, info)
+        return updateUser(userId, args.data)
     },
     async continueWithGoogle(parent, args, { request, response }) {
 

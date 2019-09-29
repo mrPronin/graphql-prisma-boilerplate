@@ -15,6 +15,19 @@
             "env": {
               "BABEL_ENV": "debug"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch",
+            "program": "${workspaceFolder}/src/index.js",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+            "envFile": "${workspaceFolder}/config/dev.env",
+            "runtimeArgs": ["--nolazy"],
+            "env": {
+              "BABEL_ENV": "debug"
+            },
+            "runtimeVersion": "10.16.3"
         }
     ]
 }

@@ -1,0 +1,25 @@
+{
+  "version": "0.2.55",
+  "steps": [
+    {
+      "stepType": "CreateField",
+      "model": "User",
+      "name": "authProviders",
+      "type": {
+        "Relation": {
+          "to": "AuthProvider",
+          "to_fields": [],
+          "name": "AuthProviderToUser",
+          "on_delete": "Cascade"
+        }
+      },
+      "arity": "list",
+      "isUnique": false
+    },
+    {
+      "stepType": "DeleteField",
+      "model": "User",
+      "name": "authProvider"
+    }
+  ]
+}

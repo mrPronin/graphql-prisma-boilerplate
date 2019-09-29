@@ -1,0 +1,36 @@
+generator photon {
+  provider = "photonjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+model User {
+  id           String         @default(cuid()) @id
+  name         String?
+  email        String?
+  password     String?
+  lastName     String?
+  picture      String?
+  authProviders AuthProvider[]  @relation(onDelete: CASCADE)
+  signupType   AuthProviderType @default(UNDEFINED)
+  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime       @default(now())
+}
+
+model AuthProvider {
+  id     String @default(cuid()) @id
+  type   AuthProviderType
+  userId String
+  token  String
+  user   User @relation(onDelete: NONE)
+}
+
+enum AuthProviderType {
+    GOOGLE
+    FACEBOOK
+    EMAIL
+    UNDEFINED
+}

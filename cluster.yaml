@@ -1,0 +1,110 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: postgres
+    name: postgres
+  spec:
+    ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+    selector:
+      io.kompose.service: postgres
+  status:
+    loadBalancer: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: postgres
+    name: postgres
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: postgres
+      spec:
+        containers:
+        - env:
+          - name: POSTGRES_PASSWORD
+            value: prisma
+          - name: POSTGRES_USER
+            value: prisma
+          image: postgres
+          name: postgres
+          ports:
+          - containerPort: 5432
+          resources: {}
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/datatmpp
+            name: postgres
+        restartPolicy: Always
+        volumes:
+        - name: postgres
+          persistentVolumeClaim:
+            claimName: postgres
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: postgres
+    name: postgres
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+  status: {}
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: prisma
+    name: prisma
+  spec:
+    replicas: 1
+    strategy: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: prisma
+      spec:
+        containers:
+        - env:
+          - name: PRISMA_CONFIG
+            value: |
+              port: 4466
+              # uncomment the next line and provide the env var PRISMA_MANAGEMENT_API_SECRET=my-secret to activate cluster security
+              # managementApiSecret: my-secret
+              databases:
+                default:
+                  connector: postgres
+                  host: postgres
+                  user: prisma
+                  password: prisma
+                  rawAccess: false
+                  port: 5432
+                  migrations: true
+          image: prismagraphql/prisma:1.33
+          name: prisma
+          ports:
+          - containerPort: 4466
+          resources: {}
+        restartPolicy: Always
+  status: {}
+kind: List
+metadata: {}

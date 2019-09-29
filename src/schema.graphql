@@ -1,5 +1,3 @@
-# import UserOrderByInput, AuthProviderType from './generated/prisma.graphql'
-
 type Query {
     me: User!
 }
@@ -75,4 +73,11 @@ enum MutationType {
     CREATED
     UPDATED
     DELETED
+}
+
+enum AuthProviderType {
+    GOOGLE
+    FACEBOOK
+    EMAIL
+    UNDEFINED
 }
