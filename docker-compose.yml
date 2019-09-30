@@ -1,5 +1,16 @@
 version: '3'
 services:
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    env_file:
+      - ./config/dev.env
+    ports:
+      - '4001:4001'
   postgres:
     image: postgres:10.5
     # restart: always

@@ -46,7 +46,8 @@
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "prisma-binding": "^2.3.12",
-    "ws": "^7.0.0"
+    "ws": "^7.0.0",
+    "prisma2": "2.0.0-preview-12"
   },
   "devDependencies": {
     "apollo-cache-inmemory": "^1.6.2",
@@ -59,7 +60,6 @@
     "apollo-link-ws": "^1.0.17",
     "subscriptions-transport-ws": "^0.9.16",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.1",
-    "prisma2": "2.0.0-preview-12"
+    "nodemon": "^1.19.1"
   }
 }

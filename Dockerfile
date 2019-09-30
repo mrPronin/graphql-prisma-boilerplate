@@ -1,6 +1,7 @@
-FROM node:alpine
+FROM node:10
 WORKDIR "/app"
 COPY ./package.json ./
+RUN npm i -g prisma2 --unsafe-perm
 RUN npm install
 COPY . .
-CMD ["npm", "run", "start"]
+CMD sh prod-start.sh
