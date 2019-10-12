@@ -1,0 +1,75 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "api-deployment"
+  labels:
+    component: "api"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: "api"
+  template:
+    metadata:
+      labels:
+        component: "api"
+    spec:
+      containers:
+        - name: "api"
+          image: "gcr.io/graphql-prisma-boilerplate/api"
+          ports:
+            - containerPort: 4001
+          env:
+          - name: "NODE_ENV"
+            valueFrom:
+              configMapKeyRef:
+                key: "NODE_ENV"
+                name: "api-config"
+          - name: "PORT"
+            valueFrom:
+              configMapKeyRef:
+                key: "PORT"
+                name: "api-config"
+          - name: "POSTGRESQL_URL"
+            valueFrom:
+              secretKeyRef:
+                name: "db-credentials"
+                key: "POSTGRESQL_URL"
+          - name: "JWT_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: "app-credentials"
+                key: "JWT_SECRET"
+          - name: "GOOGLE_IOS_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: "app-credentials"
+                key: "GOOGLE_IOS_CLIENT_ID"
+          - name: "FACEBOOK_IOS_CLIENT_ID"
+            valueFrom:
+              secretKeyRef:
+                name: "app-credentials"
+                key: "FACEBOOK_IOS_CLIENT_ID"
+          - name: "FACEBOOK_IOS_APP_SECRET"
+            valueFrom:
+              secretKeyRef:
+                name: "app-credentials"
+                key: "FACEBOOK_IOS_APP_SECRET"
+          - name: "SENDGRID_API_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: "app-credentials"
+                key: "SENDGRID_API_KEY"
+        - name: "cloudsql-proxy"
+          image: "gcr.io/cloudsql-docker/gce-proxy"
+          command: ["/cloud_sql_proxy",
+                "-instances=graphql-prisma-boilerplate:us-central1:db=tcp:5432",
+                "-credential_file=/secrets/cloudsql/credentials.json"]
+          volumeMounts:
+            - name: "my-secrets-volume"
+              mountPath: "/secrets/cloudsql"
+              readOnly: true
+      volumes:
+        - name: "my-secrets-volume"
+          secret:
+            secretName: "cloudsql-instance-credentials"
