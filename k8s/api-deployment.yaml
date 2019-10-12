@@ -66,10 +66,10 @@ spec:
                 "-instances=graphql-prisma-boilerplate:us-central1:db=tcp:5432",
                 "-credential_file=/secrets/cloudsql/credentials.json"]
           volumeMounts:
-            - name: "my-secrets-volume"
+            - name: "cloudsql-secrets-volume"
               mountPath: "/secrets/cloudsql"
               readOnly: true
       volumes:
-        - name: "my-secrets-volume"
+        - name: "cloudsql-secrets-volume"
           secret:
             secretName: "cloudsql-instance-credentials"
