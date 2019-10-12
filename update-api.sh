@@ -1,9 +1,9 @@
 #!/bin/sh
 
 SHA=$(git rev-parse HEAD)
-echo $SHA
+# echo $SHA
 PROJECT_ID=graphql-prisma-boilerplate
-echo $PROJECT_ID
+# echo $PROJECT_ID
 
 # Build local image
 docker build -t api:latest -t api:$SHA .
