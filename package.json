@@ -11,6 +11,7 @@
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "test": "env-cmd -f ./config/test.env jest --watchAll --runInBand",
+    "integration-test": "env-cmd -f ./config/test.env jest --runInBand",
     "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
     "prisma-generate": "env-cmd -f ./config/dev.env npx prisma2 generate",
     "prisma-dev": "env-cmd -f ./config/dev.env prisma2 dev"

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SHA=$(git rev-parse HEAD)
+SHA=$(git rev-parse --short=7 HEAD)
 # echo $SHA
 PROJECT_ID=graphql-prisma-boilerplate
 # echo $PROJECT_ID
