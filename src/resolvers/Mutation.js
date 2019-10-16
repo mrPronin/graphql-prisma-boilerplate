@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import bcrypt from 'bcryptjs'
 
-import { errorEmailTaken, errorUnableToLogin, errorUserNotFound } from '../utils/errors'
+import { errorUnableToLogin, errorUserNotFound } from '../utils/errors'
 import {
     generateToken, 
     hashPassword,
@@ -18,11 +18,6 @@ import { authenticateFacebook, authenticateGoogle } from '../services/auth'
 
 const Mutation = {
     async createUser(parent, args, { photon }, info) {
-        const existingUser = await getUserByEmail(args.data.email)
-        if (existingUser) {
-            throw errorEmailTaken()
-        }
-        
         const password = await hashPassword(args.data.password)
 
         // Create new user

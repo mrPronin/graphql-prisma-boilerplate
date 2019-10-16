@@ -8,27 +8,28 @@ import {
     getUserBySocialMediaId,
     getAuthProviderForUser,
     updateUserWithPicture,
-    getUserById
+    getUserById,
+    createUserWithData,
+    deleteUser
 } from './utils/user'
 
-async function createUser() {
-    const user = await photon.users.create({
-        data: {
-            name: '20190929_01',
-            email: '20190929_01@example.com',
-            password: '12345678',
-            signupType: 'GOOGLE',
-            authProviders: {
-                create: [
-                    {
-                        type: 'GOOGLE',
-                        userId: 'GOOGLE_20190929_01_userId',
-                        token: 'GOOGLE_20190929_01_token'
-                    }
-                ]
-            }
+async function test_createUserWithData() {
+    const data = {
+        name: '20190929_01',
+        email: '20190929_01@example.com',
+        password: '12345678',
+        signupType: 'GOOGLE',
+        authProviders: {
+            create: [
+                {
+                    type: 'GOOGLE',
+                    userId: 'GOOGLE_20190929_01_userId',
+                    token: 'GOOGLE_20190929_01_token'
+                }
+            ]
         }
-    })
+    }
+    const user = await createUserWithData(data)
     console.log(`user: ${JSON.stringify(user, undefined, 2)}`)
 }
 
@@ -57,6 +58,11 @@ async function authProviders() {
         }
     })
     console.log(`providers: ${JSON.stringify(providers, undefined, 2)}`)
+}
+
+async function deleteAuthProviders() {
+    const deletedCount = await photon.authProviders.deleteMany()
+    console.log(`deletedCount: ${JSON.stringify(deletedCount, undefined, 2)}`)
 }
 
 async function users() {
@@ -107,12 +113,45 @@ async function test_updateUserWithPicture(id, picture) {
     await updateUserWithPicture(user, picture)
 }
 
+async function test_deleteUser() {
+    const userName = '20191015_02'
+    const signupType = 'GOOGLE'
+    const data = {
+        name: userName,
+        email: `${userName}@example.com`,
+        password: '12345678',
+        signupType: signupType,
+        authProviders: {
+            create: [
+                {
+                    type: signupType,
+                    userId: `${signupType}_${userName}_userId`,
+                    token: `${signupType}_${userName}_token`
+                }
+            ]
+        }
+    }
+    const user = await createUserWithData(data)
+    await users()
+    // console.log(`user: ${JSON.stringify(user, undefined, 2)}`)
+    // const deletedUser = await deleteUser(user.id)
+    // console.log(`deletedUser: ${JSON.stringify(deletedUser, undefined, 2)}`)
+}
+
+async function deleteUsers() {
+    const deletedCount = await photon.users.deleteMany()
+    console.log(`deletedCount: ${JSON.stringify(deletedCount, undefined, 2)}`)
+}
 // updateUser()
 // authProviders()
 // users()
 // testGetUserBySocialMediaId('GOOGLE_20190929_01_userId', 'GOOGLE')
 // testGetAuthProviderForUser('ck15bp1q00000w49e45zl1svn', 'GOOGLE')
 // test_updateUserWithPicture('ck15bp1q00000w49e45zl1svn', 'test_picture_name.png')
+// test_createUserWithData()
+// test_deleteUser()
+// deleteAuthProviders()
+// deleteUsers()
 
 // debug
 

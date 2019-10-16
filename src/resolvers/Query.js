@@ -12,7 +12,7 @@ const Query = {
     },
     loggedInMessage(parent, args, { request }, info) {
         const userId = getUserId(request)
-        return 'You are logged in! Welcome to Kubernetes!'
+        return 'You are logged in!'
     }
 }
 

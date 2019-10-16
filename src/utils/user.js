@@ -10,7 +10,8 @@ import {
   errorUserDataIsEmpty,
   errorTokenIsEmpty,
   errorUserIdIsEmpty,
-  errorUnableToDeleteUser
+  errorUnableToDeleteUser,
+  errorEmailTaken
 } from './errors'
 
 const isValidPassword = (password) => {
@@ -236,24 +237,29 @@ const deleteUser = async (id, info, followUpEmailEnabled = false) => {
     if (followUpEmailEnabled) {
         sendFollowUpEmail(user.email, user.name)
     }
-    await photon.users.delete({
-        where: { id }
+    const deletedUser = await photon.users.delete({
+        where: { id: id }
     })
-    return user
+    return deletedUser
 }
 
 const createUserWithData = async (userData, welcomeEmailEnabled = false) => {
     // console.log(`userData: ${JSON.stringify(userData, undefined, 2)}`)
     const { name, email, password, lastName, picture, signupType } = userData
     const newUserData = {}
+
+    // email
+    if (!_.isEmpty(email) && _.isString(email)) {
+        const existingUser = await getUserByEmail(email)
+        if (existingUser) {
+            throw errorEmailTaken()
+        }
+        newUserData.email = email.toLowerCase()
+    }
+
     // name
     if (!_.isEmpty(name) && _.isString(name)) {
         newUserData.name = name
-    }
-
-    // update email
-    if (!_.isEmpty(email) && _.isString(email)) {
-        newUserData.email = email.toLowerCase()
     }
 
     // password
