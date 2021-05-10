@@ -42,7 +42,7 @@
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.17.4",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
