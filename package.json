@@ -35,7 +35,7 @@
     "@sendgrid/mail": "^6.4.0",
     "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
-    "cross-fetch": "^3.0.4",
+    "cross-fetch": "^3.1.5",
     "env-cmd": "^9.0.3",
     "google-auth-library": "^4.2.0",
     "graphql": "^0.13.2",
